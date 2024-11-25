@@ -8,6 +8,7 @@ import json
 
 #hashecar,check_password/verificar senha hasheada
 from django.contrib.auth.hashers import make_password,check_password
+from django.contrib.auth import authenticate
 
 @api_view(['GET'])
 def get_userAll(request):
@@ -20,8 +21,10 @@ def get_userAll(request):
         return Response(serializer.data)
 
 
+
 @api_view(['GET','POST'])
-def get_user(request):
+#apenas exibir as tabelas/ REFORMAR
+def register(request):
     if request.method=='GET':
         try:   
             if request.GET['user']:
@@ -35,15 +38,15 @@ def get_user(request):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        #REGISTER ADD
     if request.method=="POST":
         try: # Obter dados da requisição
             user_email=request.data.get('email')
             user_password=request.data.get('password')
             
             # Verificar se o email já existe
-            user_extist=User_Login.objects.filter(email=user_email)
-            if user_extist:
-                return Response("ERRO: Usuário com este email já existe.",status=status.HTTP_400_BAD_REQUEST)
+            if User_Login.objects.filter(email=user_email).exists():
+                return Response("ERRO: Usuário com este email/senha já cadastrado.", status=status.HTTP_400_BAD_REQUEST)
             
             # Hashear a senha e substituir na requisição
             hash_password=make_password(user_password)
@@ -57,3 +60,23 @@ def get_user(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+#fazer login
+@api_view(['POST'])
+def login(request):
+    if request.method=='POST':
+        user_email=request.data.get('email')
+        user_password=request.data.get('password')
+        if user_email and user_password:
+            # Usar authenticate para verificar se as credenciais estão corretas
+            user = authenticate(request, username=user_email, password=user_password)
+
+            # Se a autenticação for bem-sucedida, o usuário será retornado
+            if user is not None:
+                return Response(f'Login realizado com sucesso para o usuário {user.email}.', status=status.HTTP_200_OK)
+            else:
+                # Caso a autenticação falhe
+                return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            # Caso algum dos parâmetros obrigatórios não seja fornecido
+            return Response("Parâmetros 'email' e 'password' são obrigatórios.", status=status.HTTP_400_BAD_REQUEST)
