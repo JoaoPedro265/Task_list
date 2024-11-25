@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import User_Login,Task_List
-
+from .models import Task_List
+from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User_Login
+        model = User
         fields = '__all__'  # Inclui todos os campos do modelo
         # Ou liste os campos específicos que você quer serializar
         # fields = ['user', 'description', 'completed']
