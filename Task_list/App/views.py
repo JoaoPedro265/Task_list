@@ -7,9 +7,12 @@ from .serializer import TaskSerializer,UserSerializer#serializer
 import json
 from django.contrib.auth.models import User
 
-#hashecar,check_password/verificar senha hasheada
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password,check_password
 from django.contrib.auth import authenticate
+from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['GET'])
 def get_userAll(request):
@@ -22,7 +25,7 @@ def get_userAll(request):
         return Response(serializer.data)
 
 
-
+#REGISTER
 @api_view(['GET','POST'])
 #apenas exibir as tabelas/ REFORMAR
 def register(request):
@@ -39,7 +42,7 @@ def register(request):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        #REGISTER ADD
+    #REGISTER ADD
     if request.method=="POST":
         try: # Obter dados da requisição
             user_name=request.data.get('username')
@@ -52,37 +55,61 @@ def register(request):
             if User.objects.filter(email=user_email).exists():
                 return Response(f'tem um usuario com o mesmo EMAIL',status=status.HTTP_400_BAD_REQUEST)
             
-            # Hashear a senha e substituir na requisição
-            hash_password=make_password(user_password)
-            request.data['password']=hash_password
+            # Criar dicionario de dados/Hashear a senha e substituir na requisição
+            user_data = {
+            "username": user_name,
+            "email": user_email,
+            "password": make_password(user_password)  # Hashear senha
+        }
 
             # Serializar os dados e salvar o novo usuário
-            serializer=UserSerializer(data=request.data)
+            serializer=UserSerializer(data=user_data)
             if serializer.is_valid():
-                serializer.save()
+                #serializer.save()
                 return Response(serializer.data,status=status.HTTP_201_CREATED)
-            return Response('erro ao sauvar usuario',status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
+             # Retornar erros de validação do serializer
+            return Response(f'erro{serializer.errors}',status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response(f'erro:{str(e)}',status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+        # Tratar erros inesperados
+            return Response({'error': 'Ocorreu um erro ao processar a solicitação.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-#fazer login
+    #REMOVE   
+    if request.method=='DELETE':
+        pass
+
+
+#LOGIN
 @api_view(['POST'])
 def login(request):
     if request.method=='POST':
-        user_name=request.data.get('email')
+ 
+        user_name=request.data.get('username')
         user_password=request.data.get('password')
-        if user_name and user_password:
-            # Usar authenticate para verificar se as credenciais estão corretas
-            user=User.objects.get(email=user_name)
-            user = authenticate(request, username=user, password=user_password)
+        # Verificar se os campos obrigatórios foram fornecidos
+        if not user_name or not user_password:
+            return Response(
+                {"error": "Parâmetros 'username' e 'password' são obrigatórios."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Usar authenticate para verificar se as credenciais estão corretas
+        user = authenticate(request, username=user_name, password=user_password)
 
-            # Se a autenticação for bem-sucedida, o usuário será retornado
-            if user is not None:
-                return Response(f'Login realizado com sucesso para o usuário {user.email}', status=status.HTTP_200_OK)
-            else:
-                # Caso a autenticação falhe
-                return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
+        # Se a autenticação for bem-sucedida, o usuário será retornado
+        if user is not None:#add token
+            # Gerar o token usando o pacote simplejwt
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+                
+                # Retornar o token de acesso
+                return Response(
+                    {"access": access_token, "refresh": str(refresh)},
+                    status=status.HTTP_200_OK
+                )
         else:
-            # Caso algum dos parâmetros obrigatórios não seja fornecido
-            return Response("Parâmetros 'username' e 'password' são obrigatórios.", status=status.HTTP_400_BAD_REQUEST)
+            # Caso a autenticação falhe
+            return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
 
