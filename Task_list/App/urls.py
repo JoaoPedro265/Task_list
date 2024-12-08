@@ -5,9 +5,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
     path("token/",TokenObtainPairView.as_view()),
-    path("token/refresh", TokenRefreshView.as_view()),
-    
+
+    path("token/refresh/", TokenRefreshView.as_view()),#renovador de token
+
     path('',views.get_userAll,name='get_users'),
     path('register/',views.register,name='get_user'),
     path('login/',views.login,name='login'),
+    path('tasks/',views.tasks,name='lists'),#rota mostrar tasks
+    path("task/view/<int:id>",views.task_view),#rota mostar/deletar task
+  
 ]  

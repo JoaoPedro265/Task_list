@@ -1,15 +1,15 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from rest_framework import status
 
 from .models import Task_List#models
-from .serializer import TaskSerializer,UserSerializer#serializer
+from .serializer import TaskSerializer,UserSerializer,ViewtaskSerializer#serializer
 import json
 from django.contrib.auth.models import User
 
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password,check_password
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -48,38 +48,48 @@ def register(request):
             user_name=request.data.get('username')
             user_email=request.data.get('email')
             user_password=request.data.get('password')
-           
-            # Verificar se o email/nome já existe
-            if User.objects.filter(username=user_name).exists():
-                return Response(f'tem um usuario com o mesmo NOME',status=status.HTTP_400_BAD_REQUEST)
-            if User.objects.filter(email=user_email).exists():
-                return Response(f'tem um usuario com o mesmo EMAIL',status=status.HTTP_400_BAD_REQUEST)
-            
-            # Criar dicionario de dados/Hashear a senha e substituir na requisição
+
+            # Verificar campos obrigatórios
+            if not user_name or not user_email or not user_password:
+                return Response('Campos obrigatórios estão faltando.', status=status.HTTP_400_BAD_REQUEST)
+
+            # Preparar os dados do usuário/Criar dicionario de dados/Hashear a senha e substituir na requisição
             user_data = {
             "username": user_name,
             "email": user_email,
             "password": make_password(user_password)  # Hashear senha
         }
-
-            # Serializar os dados e salvar o novo usuário
+            # Serializar os dados/salvar o novo usuário
             serializer=UserSerializer(data=user_data)
             if serializer.is_valid():
-                #serializer.save()
-                return Response(serializer.data,status=status.HTTP_201_CREATED)
+                try:
+                    validated_data=serializer.validated_data
+
+                    # Verificar se o nome de usuário ou email já existe
+                    if User.objects.filter(username=validated_data['username']).exists():
+                        return Response('Já existe um usuário com este nome.', status=status.HTTP_400_BAD_REQUEST)
+                    if User.objects.filter(email=validated_data['email']).exists():
+                        return Response('Já existe um usuário com este email.', status=status.HTTP_400_BAD_REQUEST)
+                        
+                    # Validar formato do email (por exemplo, verificar se é do domínio "gmail.com")
+                    if '@gmail.com' not in validated_data['email']:
+                        return Response('O email deve ser do domínio @gmail.com.', status=status.HTTP_400_BAD_REQUEST)
+                    
+                    #sauvar
+                    #serializer.save()
+                    return Response('Usuário registrado com sucesso.',status=status.HTTP_201_CREATED)
+                except:
+                    # Retornar erros de validação do serializer
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                # Capturar erros de validação
+                return Response(f'Erro:{serializer.errors}',status=status.HTTP_400_BAD_REQUEST)
             
-             # Retornar erros de validação do serializer
-            return Response(f'erro{serializer.errors}',status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as e:
             return Response(f'erro:{str(e)}',status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
         # Tratar erros inesperados
             return Response({'error': 'Ocorreu um erro ao processar a solicitação.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    #REMOVE   
-    if request.method=='DELETE':
-        pass
-
 
 #LOGIN
 @api_view(['POST'])
@@ -112,4 +122,73 @@ def login(request):
         else:
             # Caso a autenticação falhe
             return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+#VIEWS_ALL
+def tasks(request):
+    if request.method=='GET':
+        #carregar as tabela
+        try:
+            table=Task_List.objects.filter(user=request.user)
+            serializer=TaskSerializer(table, many=True)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response('ERRO')
+    #ADD_TASK
+    if request.method=='POST':
+        text=request.data.get('text')
+        user=request.user
+        descrition=request.data.get('descrition')
+        data={
+            'user':user.id,
+            'descrition':descrition,
+            'text':text,
+        }
+        serializer=ViewtaskSerializer(data=data)
+        if serializer.is_valid():
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        
+
+@api_view(['GET','DELETE','PUT','POST'])
+@permission_classes([IsAuthenticated])
+def task_view(request,id):
+    #TASK_VIEW_ID
+    if request.method=="GET":
+        try:                         #id da tabela /  id de usuario
+            task=Task_List.objects.get(id=id,user=request.user)
+            serializer=ViewtaskSerializer(task)
+            return Response({
+                'message':'deu certo',
+                'data':serializer.data,
+            })
+        except:
+            return Response({'message': 'Tarefa não encontrada ou não pertence ao usuário.'}, status=404)
+    #DELETE_TASK
+    if request.method=='DELETE':
+        try:                        #id da tabela /  id de usuario
+            task=Task_List.objects.get(id=id,user=request.user)
+            serializer=ViewtaskSerializer(task)
+            #task.delete()
+            return Response({
+                'message':'DELETANDO...',
+                'data':serializer.data,
+            })
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    #EDIT_TASK
+    if request.method=='PUT':
+        try:
+            upload_task=Task_List.objects.get(pk=id,user=request.user)
+            serializer=ViewtaskSerializer(upload_task,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    #CONCLUED_TASK
+    if request.method=='POST':
+        pass
 
