@@ -74,7 +74,7 @@ def register(request):
                         return Response('O email deve ser do domínio @gmail.com.', status=status.HTTP_400_BAD_REQUEST)
                     
                     #sauvar
-                    #serializer.save()
+                    serializer.save()
                     return Response('Usuário registrado com sucesso.',status=status.HTTP_201_CREATED)
                 except:
                     # Retornar erros de validação do serializer
@@ -181,7 +181,7 @@ def task_view(request,id):
         try:                        #id da tabela /  id de usuario
             task=Task_List.objects.get(id=id,user=request.user)
             serializer=ViewtaskSerializer(task)
-            #task.delete()
+            task.delete()
             return Response({
                 'message':'DELETANDO...',
                 'data':serializer.data,
