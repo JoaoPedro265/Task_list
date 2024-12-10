@@ -4,13 +4,12 @@ from rest_framework import status
 
 from .models import Task_List#models
 from .serializer import TaskSerializer,UserSerializer,ViewtaskSerializer#serializer
-import json
 from django.contrib.auth.models import User
 
 
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,logout
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -41,7 +40,6 @@ def register(request):
                 return Response(serializer.data)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
     #REGISTER ADD
     if request.method=="POST":
         try: # Obter dados da requisição
@@ -52,11 +50,13 @@ def register(request):
             # Verificar campos obrigatórios
             if not user_name or not user_email or not user_password:
                 return Response('Campos obrigatórios estão faltando.', status=status.HTTP_400_BAD_REQUEST)
+            #tratar o email
+            email_correct=user_email.strip().lower()
 
             # Preparar os dados do usuário/Criar dicionario de dados/Hashear a senha e substituir na requisição
             user_data = {
             "username": user_name,
-            "email": user_email,
+            "email": email_correct,
             "password": make_password(user_password)  # Hashear senha
         }
             # Serializar os dados/salvar o novo usuário
@@ -65,9 +65,7 @@ def register(request):
                 try:
                     validated_data=serializer.validated_data
 
-                    # Verificar se o nome de usuário ou email já existe
-                    if User.objects.filter(username=validated_data['username']).exists():
-                        return Response('Já existe um usuário com este nome.', status=status.HTTP_400_BAD_REQUEST)
+                    # Verificar se o email já existe
                     if User.objects.filter(email=validated_data['email']).exists():
                         return Response('Já existe um usuário com este email.', status=status.HTTP_400_BAD_REQUEST)
                         
@@ -83,17 +81,18 @@ def register(request):
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
                 # Capturar erros de validação
-                return Response(f'Erro:{serializer.errors}',status=status.HTTP_400_BAD_REQUEST)
-            
+                 return Response(
+                    {"error": 'este usuario/email ja existe', 
+                     "refresh": serializer.errors},
+                    status=status.HTTP_200_OK
+                ) 
         except ValidationError as e:
             return Response(f'erro:{str(e)}',status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-        # Tratar erros inesperados
-            return Response({'error': 'Ocorreu um erro ao processar a solicitação.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 #LOGIN
 @api_view(['POST'])
-def login(request):
+def user_login(request):
     if request.method=='POST':
  
         user_name=request.data.get('username')
@@ -104,7 +103,7 @@ def login(request):
                 {"error": "Parâmetros 'username' e 'password' são obrigatórios."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Usar authenticate para verificar se as credenciais estão corretas
         user = authenticate(request, username=user_name, password=user_password)
 
@@ -122,6 +121,19 @@ def login(request):
         else:
             # Caso a autenticação falhe
             return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def user_logout(request):
+    if request.method=="POST":
+        refresh_token=request.data.get('refresh')# Pega o refresh token enviado pelo cliente
+        if refresh_token:
+            token=RefreshToken(refresh_token)# Cria o objeto RefreshToken com o token recebido
+            token.blacklist() # Marca o token como inválido (blacklisted)
+        else:
+            return Response('ERRO')
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET','POST'])
@@ -159,10 +171,7 @@ def task_view(request,id):
         try:                         #id da tabela /  id de usuario
             task=Task_List.objects.get(id=id,user=request.user)
             serializer=ViewtaskSerializer(task)
-            return Response({
-                'message':'deu certo',
-                'data':serializer.data,
-            })
+            return Response(serializer.data,status=status.HTTP_200_OK)
         except:
             return Response({'message': 'Tarefa não encontrada ou não pertence ao usuário.'}, status=404)
     #DELETE_TASK
@@ -178,7 +187,7 @@ def task_view(request,id):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    #EDIT_TASK
+    #EDIT_TASK/CONCLUED_TASK
     if request.method=='PUT':
         try:
             upload_task=Task_List.objects.get(pk=id,user=request.user)
@@ -188,7 +197,3 @@ def task_view(request,id):
                 return Response(serializer.data)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-    #CONCLUED_TASK
-    if request.method=='POST':
-        pass
-

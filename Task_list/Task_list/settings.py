@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',#faz o logout funcionar
     'corsheaders',
     'App',
     'django.contrib.admin',
@@ -62,7 +63,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
+SIMPLE_JWT = {
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 
 ROOT_URLCONF = 'Task_list.urls'

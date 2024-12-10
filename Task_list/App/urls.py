@@ -10,8 +10,8 @@ urlpatterns = [
 
     path('',views.get_userAll,name='get_users'),
     path('register/',views.register,name='get_user'),
-    path('login/',views.login,name='login'),
+    path('login/',views.user_login,name='login'),
+    path('logout/',views.user_logout),
     path('tasks/',views.tasks,name='lists'),#rota mostrar tasks
-    path("task/view/<int:id>",views.task_view),#rota mostar/deletar task
-  
+    path('task/view/<int:id>',views.task_view),#rota mostar/deletar task
 ]  
