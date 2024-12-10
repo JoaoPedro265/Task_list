@@ -160,7 +160,9 @@ def tasks(request):
         }
         serializer=ViewtaskSerializer(data=data)
         if serializer.is_valid():
+            serializer.save()  # Salvar a tarefa no banco de dados
             return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 @api_view(['GET','DELETE','PUT','POST'])
