@@ -40,6 +40,7 @@ def register(request):
                 return Response(serializer.data)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
     #REGISTER ADD
     if request.method=="POST":
         try: # Obter dados da requisição
@@ -50,7 +51,7 @@ def register(request):
             # Verificar campos obrigatórios
             if not user_name or not user_email or not user_password:
                 return Response('Campos obrigatórios estão faltando.', status=status.HTTP_400_BAD_REQUEST)
-            #tratar o email
+            #tratar email
             email_correct=user_email.strip().lower()
 
             # Preparar os dados do usuário/Criar dicionario de dados/Hashear a senha e substituir na requisição
@@ -85,10 +86,10 @@ def register(request):
                     {"error": 'este usuario/email ja existe', 
                      "refresh": serializer.errors},
                     status=status.HTTP_200_OK
-                ) 
+                )
+            
         except ValidationError as e:
             return Response(f'erro:{str(e)}',status=status.HTTP_400_BAD_REQUEST)
-
 
 #LOGIN
 @api_view(['POST'])
@@ -103,7 +104,7 @@ def user_login(request):
                 {"error": "Parâmetros 'username' e 'password' são obrigatórios."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        
         # Usar authenticate para verificar se as credenciais estão corretas
         user = authenticate(request, username=user_name, password=user_password)
 
@@ -122,7 +123,6 @@ def user_login(request):
             # Caso a autenticação falhe
             return Response('Credenciais inválidas/usuario nao existe. Tente novamente.', status=status.HTTP_401_UNAUTHORIZED)
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):
@@ -134,7 +134,6 @@ def user_logout(request):
         else:
             return Response('ERRO')
         return Response(status=status.HTTP_200_OK)
-
 
 @api_view(['GET','POST'])
 @permission_classes([IsAuthenticated])
