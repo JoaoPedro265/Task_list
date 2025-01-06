@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task_List
-        fields = ['text','data','completed']
+        fields = ['text','data','completed','id']
 
 class ViewtaskSerializer(serializers.ModelSerializer):
     class Meta:

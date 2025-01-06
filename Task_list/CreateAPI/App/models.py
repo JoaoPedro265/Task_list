@@ -13,5 +13,5 @@ class Task_List(models.Model):
     completed=models.BooleanField(default=False)
 
     def __str__(self):
-        return f'id:{self.id} | user:{self.user} | descrition:{self.descrition} |  test:{self.text}'
+        return f'id:{self.id} | user:{self.user} |userID:{self.user.id}| descrition:{self.descrition} |  test:{self.text}'
     

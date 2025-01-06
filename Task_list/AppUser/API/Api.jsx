@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(async req=>{
     if (!access){
         //renova
         console.log('renovando..')
-        const response=await axios.post(`http://127.0.0.1:8000/api/token/refresh/`,{
+        const response=await axios.post(`${baseURL}token/refresh/`,{
             refresh:refresh
         })
         let datatoken=response.data.access
@@ -35,7 +35,6 @@ axiosInstance.interceptors.request.use(async req=>{
     }
     //se nenhum expirou retorna normalmente
     req.headers.Authorization=`Bearer ${access}`
-    console.log(`Receba:${access}`)
     return req
 
 })

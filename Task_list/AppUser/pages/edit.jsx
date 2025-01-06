@@ -1,59 +1,78 @@
-import { useState, useEffect } from "react";
-import Cookies from 'js-cookie'
-import axiosInstance from "../API/Api";
+import { useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../API/Api';
 
 export function Edit() {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true);
-  // Função para obter um cookie pelo nome
+  const [loading, setLoading] = useState(null)
+  const { taskID } = useParams()
+  const[userID,setUserID]=useState(null)
+  const [data, setData] = useState('')
+  const [descrition, setDescrition] = useState('')
+  const [text, setText] = useState('')
+  const [completed, setCompleted] = useState(false)
 
-
-  const fetchData = async () => {
+  const fetchDataTask = async () => {
     try {
-      let response = await axiosInstance.get('')
-      // const response = await fetch('http://127.0.0.1:8000/api/')
-      // if (!response.ok) { throw new Error("Erro na requisição") }
-      //let data = await response.json()//converte pra json
-      console.log(response.data)
-      setData(response.data)//add to data
+      let response = await axiosInstance.get(`task/view/${taskID}`)
+      const result = response.data
+      setData(result)
+      setDescrition(result.descrition)
+      setText(result.text)
+      setCompleted(result.completed)
+      setUserID(result.user)
     } catch (error) {
-      console.error("Erro:", error);
+      console.error("Erro:", error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
-
   useEffect(() => {
-    fetchData();
+    fetchDataTask();
+
   }, []);
+
+  function editTask() {
+    try {
+      let response = axiosInstance.put(`task/view/${taskID}`, {
+        descrition: descrition,
+        text: text,
+        completed: completed,
+        user:userID,
+      })
+      console.log(response.data)
+    } catch (error) {
+      console.error("Erro:", error)
+    }
+  }
 
   if (loading) {
     return <div>Carregando...</div>;
   }
-
-  function logout(){
-    Cookies.remove('refresh_token', { path: '/' });
-    Cookies.remove('access_token', { path: '/' })
-    return
-  }
-function botton(){
-  console.log('Access Token:', Cookies.get('access_token'));
-  console.log('Refresh Token:', Cookies.get('refresh_token'));
-  return
-}
   return (
     <div>
-      <a href="" onClick={logout}>Logout</a>
-      <h1>Dados da API</h1>
+      <h1>Editando Dados</h1>
       <ul>
-        {JSON.stringify(data)}
-        {data.map((item) => (
-          <li key={item.id}>{item.username}</li>
-        ))}
-      </ul>
-      <button onClick={botton}>cick</button>
-    </div>
+        <input
+          type="text"
+          placeholder='descrition'
+          value={descrition}
+          onChange={(e) => setDescrition(e.target.value)} /><br />
 
+        <textarea
+          name="Text:"
+          value={text}
+          onChange={(e) => setText(e.target.value)}>hello hello</textarea><br />
+
+        <input
+          type="checkbox"
+          checked={completed}
+          onChange={(e) => setCompleted(e.target.checked)} /><br />
+        <button onClick={editTask}>Click</button>
+      </ul>
+    </div>
   )
 }
-export default Edit;
+
+//console.log(Object.prototype.toString.call(obj));
