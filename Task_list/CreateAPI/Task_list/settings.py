@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,14 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',#faz o logout funcionar
-    'corsheaders',
     'App',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,7 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
+    'http://localhost:5173',
+    "http://frontend.local",
 ]
 
 REST_FRAMEWORK = {
@@ -64,7 +65,9 @@ REST_FRAMEWORK = {
     ),
 }
 SIMPLE_JWT = {
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': True,  # Coloca o token rotacionado na blacklist
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),  # Access token válido por 10 minutos
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Refresh token válido por 7 dias
 }
 
 

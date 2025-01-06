@@ -15,7 +15,6 @@ export function Login() {
         username:username,
         password:password,
       })
-      console.log(response.data.refresh)
       const result=response.data
 
       // se receber o acces e refresh token.../sauva no Cookes
@@ -23,7 +22,7 @@ export function Login() {
         // Salvando os tokens nos cookies
         Cookies.set('access_token', result.access, { expires: 3 / 86400, secure: true }); // Expira após 3 segundos
         Cookies.set('refresh_token', result.refresh, { expires: 6, secure: true }); // Expira após 7 dias
-        navigate('edit/')
+        navigate('/home/')
 
       } else {
         alert('Usuário ou senha incorretos');
