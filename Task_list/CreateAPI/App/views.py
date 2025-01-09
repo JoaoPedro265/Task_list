@@ -151,14 +151,17 @@ def tasks(request):
     if request.method=='POST':
         text=request.data.get('text')
         user=request.user
-        descrition=request.data.get('descrition')
+        taskName=request.data.get('taskName')
+        completed=request.data.get('completed')
         data={
             'user':user.id,
-            'descrition':descrition,
+            'taskName':taskName,
             'text':text,
+            'completed':completed
         }
         serializer=ViewtaskSerializer(data=data)
         if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         
 
