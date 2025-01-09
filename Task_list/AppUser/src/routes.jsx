@@ -9,6 +9,7 @@ import { Home } from "../pages/home";
 import { Edit} from "../pages/edit";
 import { ViewTask } from "../pages/viewTask";
 import { Error404 } from "../pages/error404";
+import { CreateTask } from "../pages/createTask";
 
 export function AppRoutes() {
     return (
@@ -19,6 +20,7 @@ export function AppRoutes() {
                     <Route path='home/' element={<Home />} />
                     <Route path='view/task/:id' element={<ViewTask />} />
                     <Route path="edit/task/:taskID" element={<Edit/>}/>
+                    <Route path="add/task/" element={<CreateTask/>}/>
                 </Route>
 
                 {/*Rota publica*/}

@@ -14,8 +14,9 @@ export function ViewTask() {
     try {
       let response = await axiosInstance.get(`task/view/${id}`)
       setData(response.data)//add to data
-    } catch (error) {
-      console.error("Erro:", error);
+    } catch(error){
+      console.error('Erro:', error);
+      return navigate('/home/')
     } finally {
       setLoading(false);
     }
@@ -27,7 +28,19 @@ export function ViewTask() {
     return <div>Carregando...</div>;
   }
 
-function edit(){
+async function deleteTask(){
+  try{
+    let response = await axiosInstance.delete(`task/view/${id}`)
+    console.log(response.data)
+    navigate('/home/')
+  }catch(error){
+    console.error("Erro:", error)
+    return navigate('/home/')
+  }
+}
+
+
+function editTask(){
 navigate(`/edit/task/${data.id}`)
 }
   return (
@@ -36,13 +49,13 @@ navigate(`/edit/task/${data.id}`)
       <ul>
         <h1>Dados da API</h1>
         <div>
-          <strong>descrition:</strong>{data.descrition}<br />
+          <strong>Task Name:</strong>{data.taskName}<br />
           <strong>Text:</strong>{data.text}<br />
-          <strong>data:</strong>{data.data.replace('T', ' ').replace('Z', '').replace('-', '/').replace('-', '/')}<br />
-          <strong>completed:</strong>{data.completed ? 'Yes' : 'No'}<br />
-          <strong>IDuser:</strong>{data.user}
+          <strong>Data:</strong>{data.data.replace('T', ' ').replace('Z', '').replace('-', '/').replace('-', '/')}<br />
+          <strong>Completed:</strong>{data.completed ? 'Yes' : 'No'}<br />
         </div>
-        <button onClick={edit}>cick</button>
+        <button onClick={editTask}>Edit</button>
+        <button onClick={deleteTask}>Delete</button>
       </ul>
 
     </div>
