@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'  # Inclui todos os campos do modelo
         # Ou liste os campos específicos que você quer serializar
-        # fields = ['user', 'description', 'completed']
+        # fields = ['user', 'taskName', 'completed']
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
