@@ -29,6 +29,7 @@ export function Home() {
   function viewTask(taskID) {
     console.log(`Você clicou no item com id: ${taskID}`);
     navigate(`/view/task/${taskID}`)
+    return
     // Aqui você pode redirecionar, mostrar mais informações, etc.
   };
 
@@ -38,7 +39,10 @@ export function Home() {
     Cookies.remove('access_token', { path: '/' })
     return
   }
-
+  function createTask(){
+    navigate('/add/task/')
+    return
+  }
 
 
   return (
@@ -56,12 +60,13 @@ export function Home() {
               padding: '10px',     // Adiciona um pouco de espaçamento
               marginBottom: '10px' // Adiciona um espaço entre os itens
             }}> {/* Usando o item.id como chave */}
-            <strong>Texto:</strong> {item.text} <br />
+            <strong>Task Name:</strong> {item.taskName} <br />
             <strong>Data:</strong> {item.data.replace('T', ' ').replace('Z', '').replace('-','/').replace('-','/')} <br />
-            <strong>Completo:</strong> {item.completed ? 'Sim' : 'Não'} <br />
+            <strong>Completed:</strong> {item.completed ? 'Yes' : 'No'} <br />
             <br />
           </div>
         ))}
+        <button onClick={createTask}>Create Task</button>
       </ul>
     </div>
   );
