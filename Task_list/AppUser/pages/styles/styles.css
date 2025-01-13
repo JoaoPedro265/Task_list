@@ -1,0 +1,73 @@
+.login-Box {
+    width: 300px; /* Largura do campo de login */
+    padding: 16px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    background-color: white; /* Fundo branco */
+    margin: 10% auto; /* Centraliza verticalmente e horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os itens dentro do campo */
+}
+
+.login-Box div{
+    margin-top: 5px;
+}
+.Tasks-box {
+    max-width: 1500px; /* Largura máxima */
+    margin-top: 20px; /* Margem no topo */
+    margin-bottom: 20px; /* Margem embaixo */
+    padding: 16px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    background-color: white; /* Fundo branco */
+    cursor: pointer; /* Cursor muda para ponteiro ao passar o mouse */
+}
+
+.button{
+    margin-top: 20px !important;
+    margin-right: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.viewTask-box{
+    max-width: 1000px;
+    margin: auto;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    background-color: white;
+}
+
+.viewTask-box div{
+    margin-top: 5px;
+}
+
+h1{
+    text-align: center;
+}
+span{
+    font-family: 'Arial', sans-serif;
+   
+}
+
+.taskName-card{ 
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    padding: 16px; /* Espaçamento interno */
+    border-radius: 8px;/* Bordas arredondadas */
+    white-space: pre-wrap;
+    word-break: break-word;
+    }
+.text-card{
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    padding: 16px; /* Espaçamento interno */
+    border-radius: 8px;/* Bordas arredondadas */
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding-bottom: 21%;
+}

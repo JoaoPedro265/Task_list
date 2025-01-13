@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';//biblioteca para cookies//yarn add js-cookie
 import axios from "axios";
+import './styles/styles.css'
+//UI KIT
+import { TextField, Button, Box } from '@mui/material';
+
 
 export function Login() {
   const [username, setUsername] = useState(''); // Corrigido para 'setUsername'
@@ -9,13 +13,14 @@ export function Login() {
   const navigate = useNavigate();
 
   //BOTAO/fazer login
-  async function buttonSend() {
+  async function buttonSend(e) {
+    e.preventDefault()
     try {
-      let response=await axios.post('http://127.0.0.1:8000/api/login/',{
-        username:username,
-        password:password,
+      let response = await axios.post('http://127.0.0.1:8000/api/login/', {
+        username: username,
+        password: password,
       })
-      const result=response.data
+      const result = response.data
 
       // se receber o acces e refresh token.../sauva no Cookes
       if (result.access && result.refresh) {
@@ -34,22 +39,26 @@ export function Login() {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)} // Corrigido para 'setUsername'
-      />
+    <form onSubmit={buttonSend}>
+      <Box className="login-Box">
+        <h1>Login</h1>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)} // Corrigido para 'setPassword'
-      />
-      <button onClick={buttonSend}>Submit</button>
-    </div>
+        <TextField
+          required
+          label="Username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)} // Corrigido para 'setPassword' label="Outlined" variant="outlined" /
+        />
+        <TextField
+          required
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)} // Corrigido para 'setPassword' label="Outlined" variant="outlined" /
+        />
+        <Button className='button' variant="contained" type="submit">Submit</Button>
+      </Box>
+    </form>
   );
 }

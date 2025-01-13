@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../API/Api';
-import { useNavigate } from 'react-router-dom';
+import { matchPath, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'
+import './styles/styles.css'
+//Material UI KIT
+import { Button, Box, Container } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 export function Home() {
   const [data, setData] = useState([]); // Estado para armazenar os dados da API
@@ -37,37 +41,39 @@ export function Home() {
   function logout() {
     Cookies.remove('refresh_token', { path: '/' });
     Cookies.remove('access_token', { path: '/' })
+    navigate('/')
     return
   }
-  function createTask(){
+  function createTask() {
     navigate('/add/task/')
     return
   }
 
 
   return (
-    <div>
-      <a href="" onClick={logout}>Logout</a>
-      <h1>Dados da API</h1>
-      <ul>
+    < Container maxWidth="lg" sx={{ padding: 2 }}>
+      <Button variant="contained" onClick={logout} className='button'>Logout</Button>
+      <div sx={{ alignItems: 'center', }}>
+        <h1>HOME</h1>
         {data.map((item) => (
-          <div
+          <Box
+            className='Tasks-box'
             key={item.id}
-            onClick={() => ((viewTask(item.id)))}
-            style={{
-              cursor: 'pointer',   // Muda o cursor para a mãozinha
-              border: '2px solid black',  // Borda preta de 2px
-              padding: '10px',     // Adiciona um pouco de espaçamento
-              marginBottom: '10px' // Adiciona um espaço entre os itens
-            }}> {/* Usando o item.id como chave */}
+            onClick={() => viewTask(item.id)}
+          >
+
             <strong>Task Name:</strong> {item.taskName} <br />
-            <strong>Data:</strong> {item.data.replace('T', ' ').replace('Z', '').replace('-','/').replace('-','/')} <br />
+            <strong>Date:</strong> {item.data.replace('T', ' ').replace('Z', '').replace('-', '/').replace('-', '/')} <br />
             <strong>Completed:</strong> {item.completed ? 'Yes' : 'No'} <br />
-            <br />
-          </div>
+          </Box>
         ))}
-        <button onClick={createTask}>Create Task</button>
-      </ul>
-    </div>
+        <Button 
+        variant="contained" 
+        color="success" 
+        onClick={createTask}
+        className='button'>Create Task</Button>
+      </div>
+    </Container>
+
   );
 }

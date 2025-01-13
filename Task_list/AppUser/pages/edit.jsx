@@ -2,6 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../API/Api';
+import './styles/styles.css'
+//UI KIT
+import { TextField, Button, Container, Box,Switch} from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 
 export function Edit() {
   const [loading, setLoading] = useState(null)
@@ -34,7 +39,7 @@ export function Edit() {
   async function editTask(e) {
     e.preventDefault()
     console.log('editando.......')
-    if(!taskName || !text){
+    if (!taskName || !text) {
       alert('Enter the Fields')
       return
     }
@@ -59,41 +64,50 @@ export function Edit() {
     return <div>Carregando...</div>;
   }
   return (
-    <div>
-      <button onClick={back}>Back</button>
-      <h1>Edit Task</h1>
-      <form onSubmit={editTask}>
-        <div>
-          <label htmlFor="Task_Name">Task Name:</label><br />
-          <input
+    < Container maxWidth="lg" sx={{ padding: 2 }} >
+      <Button
+        className='button'
+        variant="outlined"
+        startIcon={<ArrowBackIosNewIcon />}
+        onClick={back}
+        sx={{ marginTop: 2 }}
+      >Back</Button>
+        <h1>EDIT TASK</h1>
+      <Box className='viewTask-box'>
+        <form onSubmit={editTask}>
+            <TextField
+              fullWidth
+              required
+              id="outlined-basic"
+              label="Task Name"
+              variant="outlined"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+            />
+          <div>
+            <TextField
+            fullWidth
             required
-            id='Task_Name'
-            type="text"
-            placeholder='taskName'
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)} /><br />
-        </div>
-
-        <div>
-          <label htmlFor="Text">Text:</label><br />
-          <textarea
-            required
-            id="Text"
+            multiline
+            label='Text'
+            rows={10}
             value={text}
-            onChange={(e) => setText(e.target.value)}></textarea><br />
-        </div>
+            onChange={(e) => setText(e.target.value)}
+            ></TextField>
+          </div>
 
-        <div>
-          <label htmlFor="Completed">Completed:</label>
-          <input
-            id='Completed'
-            type="checkbox"
+          <div>
+            <span>Completed:</span><Switch
+            color="success"
             checked={completed}
-            onChange={(e) => setCompleted(e.target.checked)} /><br />
-        </div>
-      <button>Click</button>
-      </form>
-    </div>
+            onChange={(e) => setCompleted(e.target.checked)}
+            ></Switch>
+          </div>
+          <Button className='button' variant="contained" sx={{ backgroundColor: 'orange' }} type="submit">Edit</Button>
+        </form>
+      </Box>
+    </Container>
+
   )
 }
 
