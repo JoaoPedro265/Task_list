@@ -1,73 +1,102 @@
-import { useState, useEffect } from 'react';
-import axiosInstance from '../API/Api';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie'
+import { useState, useEffect } from "react";
+import axiosInstance from "../API/Api";
+import { matchPath, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+//Material UI KIT
+import { Button, Box, Container } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+//components
+import HomeForm from "./components/HomeForm";
+import ButtonField from "./components/ButtonField";
 
 export function Home() {
   const [data, setData] = useState([]); // Estado para armazenar os dados da API
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
+  const [nothing, setNothing] = useState(false);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
-      let response = await axiosInstance.get('tasks/')
-      setData(response.data)
+      let response = await axiosInstance.get("tasks/");
+      if (response.data.length === 0) {
+        setNothing(true);
+      }
+      setData(response.data);
     } catch (error) {
       console.error("Erro:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
   useEffect(() => {
     fetchData(); // Chama a função para buscar os dados ao carregar o componente
-  }, []);// O array vazio garante que o useEffect será executado apenas uma vez
+  }, []); // O array vazio garante que o useEffect será executado apenas uma vez
+
+  async function deleteTable(e, taskID) {
+    e.stopPropagation();
+    try {
+      await axiosInstance.delete(`task/view/${taskID}`);
+      //atualizar o que foi deletado
+      const updatedData = data.filter((item) => item.id !== taskID); //Em outras palavras, ele remove o item com o id igual ao taskID.
+      setData(updatedData);
+    } catch (error) {
+      console.error("Erro:", error);
+    }
+  }
+
+  function viewTask(taskID) {
+    console.log(`Você clicou no item com id: ${taskID}`);
+    navigate(`/edit/task/${taskID}`);
+    return;
+  }
+
+  function logout() {
+    Cookies.remove("refresh_token", { path: "/" });
+    Cookies.remove("access_token", { path: "/" });
+    navigate("/");
+    return;
+  }
+
+  function editTask(e, taskID) {
+    e.stopPropagation();
+    navigate(`/edit/task/${taskID}`);
+  }
+
   if (loading) {
     return <div>Carregando...</div>;
   }
 
-
-  function viewTask(taskID) {
-    console.log(`Você clicou no item com id: ${taskID}`);
-    navigate(`/view/task/${taskID}`)
-    return
-    // Aqui você pode redirecionar, mostrar mais informações, etc.
-  };
-
-
-  function logout() {
-    Cookies.remove('refresh_token', { path: '/' });
-    Cookies.remove('access_token', { path: '/' })
-    return
-  }
-  function createTask(){
-    navigate('/add/task/')
-    return
-  }
-
-
   return (
-    <div>
-      <a href="" onClick={logout}>Logout</a>
-      <h1>Dados da API</h1>
-      <ul>
-        {data.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => ((viewTask(item.id)))}
-            style={{
-              cursor: 'pointer',   // Muda o cursor para a mãozinha
-              border: '2px solid black',  // Borda preta de 2px
-              padding: '10px',     // Adiciona um pouco de espaçamento
-              marginBottom: '10px' // Adiciona um espaço entre os itens
-            }}> {/* Usando o item.id como chave */}
-            <strong>Task Name:</strong> {item.taskName} <br />
-            <strong>Data:</strong> {item.data.replace('T', ' ').replace('Z', '').replace('-','/').replace('-','/')} <br />
-            <strong>Completed:</strong> {item.completed ? 'Yes' : 'No'} <br />
-            <br />
-          </div>
-        ))}
-        <button onClick={createTask}>Create Task</button>
-      </ul>
-    </div>
+    <Container maxWidth="lg" sx={{ padding: 2 }}>
+      <ButtonField onClick={logout} type={"button"}>
+        Logout
+      </ButtonField>
+      <div sx={{ alignItems: "center" }}>
+        <h1>HOME</h1>
+        {nothing ? (
+          <h2>No table created. Create a new task.</h2>
+        ) : (
+          data.map((item) => (
+            <HomeForm
+              {...{
+                item,
+                deleteTable,
+                viewTask,
+                editTask,
+                setNothing,
+              }}
+            ></HomeForm>
+          ))
+        )}
+        <ButtonField
+          onClick={() => navigate("/add/task/")}
+          color={"success"}
+          type={"button"}
+        >
+          Create Task
+        </ButtonField>
+      </div>
+    </Container>
   );
 }
