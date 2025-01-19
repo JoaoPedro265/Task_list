@@ -11,6 +11,7 @@ import { ViewTask } from "../pages/viewTask";
 import { Error404 } from "../pages/error404";
 import { CreateTask } from "../pages/createTask";
 
+
 export function AppRoutes() {
     return (
         <Router>

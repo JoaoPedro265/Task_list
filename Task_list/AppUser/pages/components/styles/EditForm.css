@@ -1,0 +1,36 @@
+.viewTask-box{
+    max-width: 1000px;
+    margin: auto;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    background-color: white;
+}
+
+.viewTask-box div{
+    margin-top: 5px;
+}
+
+h1{
+    text-align: center;
+}
+span{
+    font-family: 'Roboto', sans-serif;
+}
+.arial{
+    font-Family: 'Arial', sans-serif;
+}
+
+.completed{
+    flex: 1; /* Alinha o ícone do lixo na extremidade direita */
+    text-align: right; /* Alinha à direita */
+}
+.Buttons{
+    flex: 1; /* Alinha o ícone do lixo na extremidade direita */
+    text-align: left; /* Alinha à direita */
+   
+}
+.buttonBox{
+    display: flex;
+}

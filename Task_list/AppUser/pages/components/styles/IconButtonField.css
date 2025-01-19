@@ -1,0 +1,11 @@
+.icon-button {
+    border: 2px solid #6E6E6E !important;; /* Borda azul de 2px */
+    border-radius: 8px !important;; /* Bordas arredondadas */
+    padding: 8px !important;; /* Adiciona espaçamento interno */
+    transition: background-color 0.3s ease !important;; /* Transição suave da cor de fundo */
+    text-align: right !important;;
+  }
+  
+  .icon-button:hover {
+    background-color: #f0f0f0 !important;; /* Cor de fundo ao passar o mouse */
+  }

@@ -1,0 +1,32 @@
+
+.Tasks-box {
+    max-width: 1500px; /* Largura máxima */
+    margin-top: 20px; /* Margem no topo */
+    margin-bottom: 20px; /* Margem embaixo */
+    padding: 16px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    background-color: white; /* Fundo branco */
+    cursor: pointer; /* Cursor muda para ponteiro ao passar o mouse */
+    display: flex; /* Garante que o botão seja alinhado com flexbox */
+  }
+span{
+  font-family: 'Roboto', sans-serif;
+}
+
+.status {
+    flex: 1; /* Faz com que ocupe o espaço restante */
+    text-align: left; /* Alinha à esquerda */
+  }
+  
+  .button-TaskName {
+    flex-grow: 1; /* Ocupa o espaço restante */
+    text-align: left; /* Alinha o texto à direita */
+  }
+  
+  
+  .button-bin {
+    flex: 1; /* Alinha o ícone do lixo na extremidade direita */
+    text-align: right; /* Alinha à direita */
+  }
