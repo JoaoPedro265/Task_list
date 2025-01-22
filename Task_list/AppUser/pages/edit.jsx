@@ -4,21 +4,18 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../API/Api";
 
 //UI KIT
-import { TextField, Button, Container, Box, Switch } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import EditForm from "./components/EditForm";
-//componentes
-import ButtonField from "./components/ButtonField";
 
 export function Edit() {
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { taskID } = useParams();
   const [userID, setUserID] = useState(null);
 
   const [taskName, setTaskName] = useState("");
   const [text, setText] = useState("");
   const [completed, setCompleted] = useState(false);
-  const [deleting, setDeleting] = useState(null);
   const navigate = useNavigate();
 
   const fetchDataTask = async () => {
@@ -29,12 +26,17 @@ export function Edit() {
       setText(result.text);
       setCompleted(result.completed);
       setUserID(result.user);
+      return;
     } catch (error) {
       console.error("Erro:", error);
+      navigate(`/error404`);
     } finally {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    fetchDataTask();
+  }, []);
 
   async function editTask(e) {
     e.preventDefault();
@@ -51,9 +53,10 @@ export function Edit() {
         user: userID,
       });
       console.log(response.data);
-      navigate(`/home/`);
+      return navigate("/home/");
     } catch (error) {
-      console.error("Erro:", error);
+      console.error("Erro receba:", error);
+      return navigate("/home/");
     }
   }
 
@@ -61,18 +64,15 @@ export function Edit() {
     try {
       let response = await axiosInstance.delete(`task/view/${taskID}`);
       console.log(response.data);
-      navigate("/home/");
+      return navigate("/home/");
     } catch (error) {
       console.error("Erro:", error);
       return navigate("/home/");
     }
   }
-  useEffect(() => {
-    fetchDataTask();
-  }, []);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>loading...</div>;
   }
 
   return (

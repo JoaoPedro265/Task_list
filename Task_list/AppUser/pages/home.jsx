@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "../API/Api";
-import { matchPath, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 //Material UI KIT
-import { Button, Box, Container } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Container } from "@mui/material";
 //components
 import HomeForm from "./components/HomeForm";
 import ButtonField from "./components/ButtonField";
@@ -64,7 +63,7 @@ export function Home() {
   }
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>loading...</div>;
   }
 
   return (

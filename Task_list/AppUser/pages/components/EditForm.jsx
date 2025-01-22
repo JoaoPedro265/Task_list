@@ -1,4 +1,4 @@
-import { TextField, Button, Switch, Box, Checkbox } from "@mui/material";
+import { TextField, Button, Box, Checkbox } from "@mui/material";
 import "./styles/EditForm.css";
 const EditForm = ({
   setCompleted,

@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie"; //biblioteca para cookies//yarn add js-cookie
 import axios from "axios";
-//UI KIT
-import { TextField, Button, Box } from "@mui/material";
 //component
 import LoginField from "./components/LoginField";
 
 export function Login() {
   const [username, setUsername] = useState(""); // Corrigido para 'setUsername'
   const [password, setPassword] = useState(""); // Corrigido para 'setPassword'
+  const [alert, setAlert] = useState(false);
+  const location = useLocation(); // Acessa o estado enviado pela navegação
+  const success = location.state?.success || false;
   const navigate = useNavigate();
 
   //BOTAO/fazer login
@@ -26,11 +27,11 @@ export function Login() {
       if (result.access && result.refresh) {
         // Salvando os tokens nos cookies
         Cookies.set("access_token", result.access, {
-          expires: 3 / 86400,
+          expires: 8 / 1440, // Expira após 8 minutos
           secure: true,
         }); // Expira após 3 segundos
         Cookies.set("refresh_token", result.refresh, {
-          expires: 6,
+          expires: 6, // Expira após 6 dias
           secure: true,
         }); // Expira após 7 dias
         navigate("/home/");
@@ -38,13 +39,22 @@ export function Login() {
         alert("Usuário ou senha incorretos");
       }
     } catch (error) {
+      setAlert(true);
       console.error("Erro ao buscar dados:", error); // Trata erros na requisição
     }
   }
 
   return (
     <LoginField
-      {...{ buttonSend, setUsername, setPassword, username, password }}
+      {...{
+        buttonSend,
+        setUsername,
+        setPassword,
+        username,
+        password,
+        alert,
+        success,
+      }}
     ></LoginField>
   );
 }

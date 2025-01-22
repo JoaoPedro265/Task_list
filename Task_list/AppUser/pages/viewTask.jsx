@@ -4,9 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 //UI KIT
 import { Button, Box, Container, Card, Switch } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import CheckIcon from "@mui/icons-material/Check";
-import { Divider } from "@mui/material";
-import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 
 export function ViewTask() {
   const [data, setData] = useState([]);
@@ -31,7 +28,7 @@ export function ViewTask() {
     fetchData();
   }, []);
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>loading...</div>;
   }
 
   async function deleteTask() {

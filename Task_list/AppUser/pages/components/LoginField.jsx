@@ -1,15 +1,34 @@
 import { TextField, Button, Box } from "@mui/material";
 import "./styles/LoginField.css";
+//UI Kit
+import Alert from "@mui/material/Alert";
+
 const LoginField = ({
   buttonSend,
   setUsername,
   setPassword,
   username,
   password,
+  alert,
+  success,
 }) => {
   return (
     <form onSubmit={buttonSend}>
       <Box className="login-Box">
+        {alert ? (
+          <Alert variant="outlined" severity="warning">
+            Incorrect or unauthenticated username or password.
+          </Alert>
+        ) : (
+          ""
+        )}
+        {success ? (
+          <Alert variant="outlined" severity="success">
+            user created successfully.
+          </Alert>
+        ) : (
+          ""
+        )}
         <h1>Login</h1>
         <TextField
           fullWidth
@@ -27,9 +46,10 @@ const LoginField = ({
           value={password}
           onChange={(e) => setPassword(e.target.value)} // Corrigido para 'setPassword' label="Outlined" variant="outlined" /
         />
-        <Button className="button" variant="contained" type="submit">
+        <Button variant="contained" type="submit">
           Submit
         </Button>
+        <a href="register/">Create Account</a>
       </Box>
     </form>
   );

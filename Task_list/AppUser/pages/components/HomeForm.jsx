@@ -1,14 +1,11 @@
-import { Button, Box, Container, Checkbox } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Box, Checkbox } from "@mui/material";
 import "./styles/HomeForm.css";
 //UI KIT
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import IconButtonField from "./IconButtonField";
 //components
-import ButtonField from "./ButtonField";
 
-const HomeForm = ({ item, deleteTable, viewTask, editTask, setNothing }) => {
-  const navigate = useNavigate();
+const HomeForm = ({ item, deleteTable, viewTask }) => {
   return (
     <Box className="Tasks-box" key={item.id} onClick={() => viewTask(item.id)}>
       <div className="status">
