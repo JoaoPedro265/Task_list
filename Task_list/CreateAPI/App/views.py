@@ -221,3 +221,28 @@ def task_view(request, id):
                 return Response(serializer.data)
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # DELETE_TASK
+    if request.method == "DELETE":
+        try:  # id da tabela /  id de usuario
+            task = Task_List.objects.get(id=id, user=request.user)
+            serializer = ViewtaskSerializer(task)
+            task.delete()
+            return Response(
+                {
+                    "message": "DELETANDO...",
+                    "data": serializer.data,
+                }
+            )
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    # EDIT_TASK/CONCLUED_TASK
+    if request.method == "PUT":
+        try:
+            upload_task = Task_List.objects.get(pk=id, user=request.user)
+            serializer = ViewtaskSerializer(upload_task, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
