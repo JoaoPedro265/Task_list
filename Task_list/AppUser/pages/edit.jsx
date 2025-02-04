@@ -26,12 +26,11 @@ export function Edit() {
       setText(result.text);
       setCompleted(result.completed);
       setUserID(result.user);
+      setLoading(false);
       return;
     } catch (error) {
       console.error("Erro:", error);
       navigate(`/error404`);
-    } finally {
-      setLoading(false);
     }
   };
   useEffect(() => {
@@ -42,8 +41,7 @@ export function Edit() {
     e.preventDefault();
     console.log("editando.......");
     if (!taskName || !text) {
-      alert("Enter the Fields");
-      return;
+      return alert("Enter the Fields");
     }
     try {
       let response = await axiosInstance.put(`task/view/${taskID}`, {
@@ -53,10 +51,12 @@ export function Edit() {
         user: userID,
       });
       console.log(response.data);
-      return navigate("/home/");
+      await navigate("/home/");
+      return;
     } catch (error) {
       console.error("Erro receba:", error);
-      return navigate("/home/");
+      await navigate("/home/");
+      return;
     }
   }
 
@@ -69,10 +69,6 @@ export function Edit() {
       console.error("Erro:", error);
       return navigate("/home/");
     }
-  }
-
-  if (loading) {
-    return <div>loading...</div>;
   }
 
   return (
@@ -95,6 +91,7 @@ export function Edit() {
           text,
           completed,
           deleteTask,
+          loading,
         }}
       />
     </Container>

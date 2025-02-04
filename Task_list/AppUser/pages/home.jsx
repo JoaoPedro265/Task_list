@@ -2,21 +2,24 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../API/Api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import "./home.css";
 //Material UI KIT
-import { Container } from "@mui/material";
+import { Container, CircularProgress } from "@mui/material";
 //components
 import HomeForm from "./components/HomeForm";
 import ButtonField from "./components/ButtonField";
 
 export function Home() {
   const [data, setData] = useState([]); // Estado para armazenar os dados da API
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(null);
   const [nothing, setNothing] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       let response = await axiosInstance.get("tasks/");
+      console.log(response.data.length);
       if (response.data.length === 0) {
         setNothing(true);
       }
@@ -38,6 +41,9 @@ export function Home() {
       await axiosInstance.delete(`task/view/${taskID}`);
       //atualizar o que foi deletado
       const updatedData = data.filter((item) => item.id !== taskID); //Em outras palavras, ele remove o item com o id igual ao taskID.
+      if (updatedData.length === 0) {
+        setNothing(true);
+      }
       setData(updatedData);
     } catch (error) {
       console.error("Erro:", error);
@@ -57,15 +63,6 @@ export function Home() {
     return;
   }
 
-  function editTask(e, taskID) {
-    e.stopPropagation();
-    navigate(`/edit/task/${taskID}`);
-  }
-
-  if (loading) {
-    return <div>loading...</div>;
-  }
-
   return (
     <Container maxWidth="lg" sx={{ padding: 2 }}>
       <ButtonField onClick={logout} type={"button"}>
@@ -73,8 +70,11 @@ export function Home() {
       </ButtonField>
       <div sx={{ alignItems: "center" }}>
         <h1>HOME</h1>
-        {nothing ? (
-          <h2>No table created. Create a new task.</h2>
+        {nothing ? <h2>No table created. Create a new task.</h2> : ""}
+        {loading ? (
+          <div className="loading-Box">
+            <CircularProgress />
+          </div>
         ) : (
           data.map((item) => (
             <HomeForm
@@ -82,8 +82,6 @@ export function Home() {
                 item,
                 deleteTable,
                 viewTask,
-                editTask,
-                setNothing,
               }}
             ></HomeForm>
           ))

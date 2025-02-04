@@ -27,9 +27,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]  # dominio que vai ter acesso a sua aplicaçao
+DEBUG = True
+# define uma lista de domínios e endereços IP que o servidor Django
+# reconhece como válidos para servir a aplicação. Isso impede que a
+# aplicação seja acessada por domínios não autorizados
+ALLOWED_HOSTS = [  # dominio que vai ter acesso a sua aplicaçao
+    "task-list-back-3h78.onrender.com",  # back-end
+    "tasklistjp.netlify.app",  # front-end
+    "127.0.0.1",  # local
+    "localhost",
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,8 +64,11 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+# você controla quais origens podem fazer requisições para a sua AP
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "https://task-list-back-3h78.onrender.com",  # back-end
+    "https://tasklistjp.netlify.app",  # front-end
+    "http://localhost:5173",  # local
     "http://frontend.local",
 ]
 
@@ -177,3 +187,9 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
+# Habilitar CORS_ALLOW_CREDENTIALS se usar autenticação JWT/sessão:
+CORS_ALLOW_CREDENTIALS = True
+# Habilitar CSRF_TRUSTED_ORIGINS para evitar problemas com requisições POST do frontend:
+CSRF_TRUSTED_ORIGINS = [
+    "https://tasklistjp.netlify.app",
+]

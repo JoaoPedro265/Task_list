@@ -8,6 +8,7 @@ import { Container, Button } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 export function Register() {
+  const [loading, setLoading] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
@@ -17,16 +18,22 @@ export function Register() {
   const registerUser = async (e) => {
     e.preventDefault();
     try {
-      let response = await axios.post("http://127.0.0.1:8000/api/register/", {
-        username: name,
-        email: email,
-        password: password,
-      });
+      setLoading(true);
+      let response = await axios.post(
+        "https://task-list-back-3h78.onrender.com/api/register/",
+        {
+          username: name,
+          email: email,
+          password: password,
+        }
+      );
       console.log(response.data);
+      setLoading(false);
       setAlert(false);
       navigate("/", { state: { success: true } });
       return;
     } catch (error) {
+      setLoading(false);
       setAlert(true);
       console.error("Error:", error);
       return;
@@ -53,6 +60,7 @@ export function Register() {
           setpassword,
           alert,
           registerUser,
+          loading,
         }}
       />
     </Container>

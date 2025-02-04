@@ -12,6 +12,7 @@ const RegisterField = ({
   setpassword,
   alert,
   registerUser,
+  loading,
 }) => {
   return (
     <Container className="container">
@@ -19,7 +20,7 @@ const RegisterField = ({
         <Box className="Register-Box">
           {alert ? (
             <Alert variant="outlined" severity="warning">
-              Incorrect or unauthenticated username or password.
+              Incorrect, invalid or already used username, e-mail or password.
             </Alert>
           ) : (
             ""
@@ -46,9 +47,15 @@ const RegisterField = ({
             value={password}
             onChange={(e) => setpassword(e.target.value)}
           ></TextField>
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
+          {loading ? (
+            <Button variant="contained" disabled>
+              Loading...
+            </Button>
+          ) : (
+            <Button variant="contained" type="submit">
+              Submit
+            </Button>
+          )}
         </Box>
       </form>
     </Container>

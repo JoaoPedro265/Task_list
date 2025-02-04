@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const baseURL = "http://127.0.0.1:8000/api/";
+const baseURL = "https://task-list-back-3h78.onrender.com/api/";
 let token = Cookies.get("access_token", { path: "/" });
 
 //criando instance/cabeçalho inicial de Authorization que utiliza o token de acesso (access_token) obtido do cookie.

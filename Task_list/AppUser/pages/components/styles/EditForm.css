@@ -34,3 +34,11 @@ span{
 .buttonBox{
     display: flex;
 }
+
+.loading-Box{
+    width: 300px; /* Largura do campo de login */
+    margin: 10% auto; /* Centraliza verticalmente e horizontalmente */
+    display: flex;
+    justify-content: center; /* Centraliza os itens dentro do campo */
+    align-items: center; /* Centraliza os itens dentro do campo */
+}
