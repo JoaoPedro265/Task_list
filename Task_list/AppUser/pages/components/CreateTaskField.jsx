@@ -51,7 +51,6 @@ const CreateTaskField = ({
             <div className="completed">
               <span>Completed:</span>
               <Checkbox
-                defaultChecked
                 color="success"
                 sx={{ "& .MuiSvgIcon-root": { fontSize: 50 } }}
                 checked={completed}

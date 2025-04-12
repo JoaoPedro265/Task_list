@@ -7,10 +7,9 @@ import IconButtonField from "./IconButtonField";
 
 const HomeForm = ({ item, deleteTable, viewTask }) => {
   return (
-    <Box className="Tasks-box" key={item.id} onClick={() => viewTask(item.id)}>
+    <Box className="Tasks-box" onClick={() => viewTask(item.id)}>
       <div className="status">
         <Checkbox
-          defaultChecked
           sx={{ "& .MuiSvgIcon-root": { fontSize: 50 } }}
           color="success"
           checked={item.completed}
@@ -30,7 +29,12 @@ const HomeForm = ({ item, deleteTable, viewTask }) => {
         </span>
       </div>
       <div className="button-bin">
-        <IconButtonField onClick={(e) => deleteTable(e, item.id)}>
+        <IconButtonField
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteTable(e, item.id);
+          }}
+        >
           <DeleteOutlineIcon sx={{ fontSize: 40 }} />
         </IconButtonField>
       </div>

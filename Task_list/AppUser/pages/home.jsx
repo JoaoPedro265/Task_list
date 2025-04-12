@@ -78,6 +78,7 @@ export function Home() {
         ) : (
           data.map((item) => (
             <HomeForm
+              key={item.id}
               {...{
                 item,
                 deleteTable,
