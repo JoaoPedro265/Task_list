@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 # define uma lista de domínios e endereços IP que o servidor Django
 # reconhece como válidos para servir a aplicação. Isso impede que a
 # aplicação seja acessada por domínios não autorizados
