@@ -6,6 +6,7 @@ import RegisterField from "./components/RegisterField";
 //UI KIt
 import { Container, Button } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+const apiUrl = import.meta.env.VITE_URL_API; //importando variaveis de ambiente
 
 export function Register() {
   const [loading, setLoading] = useState(null);
@@ -19,14 +20,11 @@ export function Register() {
     e.preventDefault();
     try {
       setLoading(true);
-      let response = await axios.post(
-        "https://task-list-back-3h78.onrender.com/api/register/",
-        {
-          username: name,
-          email: email,
-          password: password,
-        }
-      );
+      let response = await axios.post(`${apiUrl}/api/register/`, {
+        username: name,
+        email: email,
+        password: password,
+      });
       console.log(response.data);
       setLoading(false);
       setAlert(false);

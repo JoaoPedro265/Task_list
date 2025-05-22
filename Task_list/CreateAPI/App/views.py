@@ -78,6 +78,13 @@ def register(request):
                             "Já existe um usuário com este email.",
                             status=status.HTTP_400_BAD_REQUEST,
                         )
+                    if User.objects.filter(
+                        username=validated_data["username"]
+                    ).exists():
+                        return Response(
+                            "Já existe um usuário com este nome.",
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
 
                     # Validar formato do email (por exemplo, verificar se é do domínio "gmail.com")
                     if (
@@ -95,10 +102,10 @@ def register(request):
                         "Usuário registrado com sucesso.",
                         status=status.HTTP_201_CREATED,
                     )
-                except:
-                    # Retornar erros de validação do serializer
+                except Exception as e:
                     return Response(
-                        serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                        {"erro_interno": str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     )
             else:
                 # Capturar erros de validação
@@ -118,35 +125,42 @@ def register(request):
 @api_view(["POST"])
 def user_login(request):
     if request.method == "POST":
+        try:
+            user_name = request.data.get("username")
+            user_password = request.data.get("password")
+            # Verificar se os campos obrigatórios foram fornecidos
+            if not user_name or not user_password:
+                return Response(
+                    {"error": "Parâmetros 'username' e 'password' são obrigatórios."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        user_name = request.data.get("username")
-        user_password = request.data.get("password")
-        # Verificar se os campos obrigatórios foram fornecidos
-        if not user_name or not user_password:
+            # Usar authenticate para verificar se as credenciais estão corretas
+            user = authenticate(request, username=user_name, password=user_password)
+
+            # Se a autenticação for bem-sucedida, o usuário será retornado
+            if user is not None:  # add token
+                # Gerar o token usando o pacote simplejwt
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+
+                # Retornar o token de acesso
+                return Response(
+                    {"access": access_token, "refresh": str(refresh)},
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                # Caso a autenticação falhe
+                return Response(
+                    "Credenciais inválidas/usuario nao existe. Tente novamente.",
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+        except Exception as e:
+            import traceback
+
+            traceback.print_exc()
             return Response(
-                {"error": "Parâmetros 'username' e 'password' são obrigatórios."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Usar authenticate para verificar se as credenciais estão corretas
-        user = authenticate(request, username=user_name, password=user_password)
-
-        # Se a autenticação for bem-sucedida, o usuário será retornado
-        if user is not None:  # add token
-            # Gerar o token usando o pacote simplejwt
-            refresh = RefreshToken.for_user(user)
-            access_token = str(refresh.access_token)
-
-            # Retornar o token de acesso
-            return Response(
-                {"access": access_token, "refresh": str(refresh)},
-                status=status.HTTP_200_OK,
-            )
-        else:
-            # Caso a autenticação falhe
-            return Response(
-                "Credenciais inválidas/usuario nao existe. Tente novamente.",
-                status=status.HTTP_401_UNAUTHORIZED,
+                {"erro_interno": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 

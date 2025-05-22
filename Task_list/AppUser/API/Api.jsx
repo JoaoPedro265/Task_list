@@ -1,7 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+const apiUrl = import.meta.env.VITE_URL_API; //importando variaveis de ambiente
 
-const baseURL = "https://task-list-back-3h78.onrender.com/api/"; // http://127.0.0.1:8000/api/   //https://task-list-back-3h78.onrender.com/api/
+const baseURL = `${apiUrl}/api/`; // http://127.0.0.1:8000/api/   //https://task-list-back-hr8k.onrender.com/api/
 let token = Cookies.get("access_token", { path: "/" });
 
 //criando instance/cabeçalho inicial de Authorization que utiliza o token de acesso (access_token) obtido do cookie.

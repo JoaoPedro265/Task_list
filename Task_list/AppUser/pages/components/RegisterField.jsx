@@ -20,7 +20,7 @@ const RegisterField = ({
         <Box className="Register-Box">
           {alert ? (
             <Alert variant="outlined" severity="warning">
-              Incorrect, invalid or already used username, e-mail or password.
+              incorrect data or user already exists.
             </Alert>
           ) : (
             ""

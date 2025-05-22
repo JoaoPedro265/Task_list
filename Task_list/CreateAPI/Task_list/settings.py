@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,16 +28,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config("DEBUG", cast=bool)  # tem que especificar o tipo de dado
+
 # define uma lista de domínios e endereços IP que o servidor Django
 # reconhece como válidos para servir a aplicação. Isso impede que a
 # aplicação seja acessada por domínios não autorizados
-ALLOWED_HOSTS = [  # dominio que vai ter acesso a sua aplicaçao
-    "task-list-back-3h78.onrender.com",  # back-end
-    "tasklistjp.netlify.app",  # front-end
-    "127.0.0.1",  # local
-    "localhost",
-]
+
+# dominio que vai ter acesso a sua aplicaçao
+ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(
+    ","
+)  # permite adicionar varios dominios no .env
 # Application definition
 
 INSTALLED_APPS = [
@@ -66,7 +67,7 @@ MIDDLEWARE = [
 ]
 # você controla quais origens podem fazer requisições para a sua AP
 CORS_ALLOWED_ORIGINS = [
-    "https://task-list-back-3h78.onrender.com",  # back-end
+    "https://task-list-back-hr8k.onrender.com",  # back-end
     "https://tasklistjp.netlify.app",  # front-end
     "http://localhost:5173",  # local
     "http://frontend.local",
@@ -116,16 +117,17 @@ WSGI_APPLICATION = "Task_list.wsgi.application"
 #         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "PORT": config("DB_PORT"),
-        "HOST": config("DB_HOST"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": config("DB_NAME"),
+#         "USER": config("DB_USER"),
+#         "PASSWORD": config("DB_PASSWORD"),
+#         "PORT": config("DB_PORT"),
+#         "HOST": config("DB_HOST"),
+#     }
+# }
+DATABASES = {"default": dj_database_url.parse(config("URL_RENDER_DATABASE"))}
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -188,8 +190,6 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
 # Habilitar CORS_ALLOW_CREDENTIALS se usar autenticação JWT/sessão:
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", cast=bool)
 # Habilitar CSRF_TRUSTED_ORIGINS para evitar problemas com requisições POST do frontend:
-CSRF_TRUSTED_ORIGINS = [
-    "https://tasklistjp.netlify.app",
-]
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS").split(",")

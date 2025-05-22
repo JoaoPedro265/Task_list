@@ -4,6 +4,7 @@ import Cookies from "js-cookie"; //biblioteca para cookies//yarn add js-cookie
 import axios from "axios";
 //component
 import LoginField from "./components/LoginField";
+const apiUrl = import.meta.env.VITE_URL_API; //importando variaveis de ambiente
 
 export function Login() {
   const [loading, setLoading] = useState(null);
@@ -13,14 +14,13 @@ export function Login() {
   const location = useLocation(); // Acessa o estado enviado pela navegação
   const success = location.state?.success || false;
   const navigate = useNavigate();
-
   //BOTAO/fazer login
   async function buttonSend(e) {
     e.preventDefault();
     try {
       setLoading(true);
       let response = await axios.post(
-        "https://task-list-back-3h78.onrender.com/api/login/", //http://127.0.0.1:8000/api/login/  //https://task-list-back-3h78.onrender.com/api/login/
+        `${apiUrl}/api/login/`, //http://127.0.0.1:8000/api/login/  //https://task-list-back-hr8k.onrender.com/api/login/
         {
           username: username,
           password: password,
