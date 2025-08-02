@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie"; //biblioteca para cookies//yarn add js-cookie
 import axios from "axios";
 //component
-import LoginField from "./components/LoginField";
+import LoginField from "../components/LoginField";
 const apiUrl = import.meta.env.VITE_URL_API; //importando variaveis de ambiente
 
 export function Login() {

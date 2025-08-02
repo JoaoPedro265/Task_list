@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 //componente
-import RegisterField from "./components/RegisterField";
+import RegisterField from "../components/RegisterField";
 //UI KIt
 import { Container, Button } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";

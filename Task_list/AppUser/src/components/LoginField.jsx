@@ -1,6 +1,6 @@
 import { TextField, Button, Box } from "@mui/material";
-import "./LoginField.css";
-
+//styles
+import "./styles/LoginField.css";
 //UI Kit
 import Alert from "@mui/material/Alert";
 

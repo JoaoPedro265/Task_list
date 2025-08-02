@@ -87,7 +87,7 @@ SIMPLE_JWT = {
 }
 
 
-ROOT_URLCONF = "Task_list.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {
@@ -105,7 +105,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "Task_list.wsgi.application"
+WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
@@ -117,17 +117,20 @@ WSGI_APPLICATION = "Task_list.wsgi.application"
 #         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": config("DB_NAME"),
-#         "USER": config("DB_USER"),
-#         "PASSWORD": config("DB_PASSWORD"),
-#         "PORT": config("DB_PORT"),
-#         "HOST": config("DB_HOST"),
-#     }
-# }
-DATABASES = {"default": dj_database_url.parse(config("URL_RENDER_DATABASE"))}
+# local
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "PORT": config("DB_PORT"),
+        "HOST": config("DB_HOST"),
+    }
+}
+# produçao
+# DATABASES = {"default": dj_database_url.parse(config("URL_RENDER_DATABASE"))}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

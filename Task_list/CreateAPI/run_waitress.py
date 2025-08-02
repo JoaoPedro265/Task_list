@@ -8,7 +8,7 @@
 # default:python manage.py runserver
 
 from waitress import serve
-from Task_list.wsgi import application
+from core.wsgi import application
 
 serve(
     application,

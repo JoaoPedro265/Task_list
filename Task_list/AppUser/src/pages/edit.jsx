@@ -6,7 +6,7 @@ import axiosInstance from "../API/Api";
 //UI KIT
 import { Button, Container } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import EditForm from "./components/EditForm";
+import EditForm from "../components/EditForm";
 
 export function Edit() {
   const [loading, setLoading] = useState(true);

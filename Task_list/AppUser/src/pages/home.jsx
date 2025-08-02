@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../API/Api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import "./home.css";
-//Material UI KIT
-import { Container, CircularProgress } from "@mui/material";
+//Styles
+import "../styles/NoTableHome.css";
 //components
-import HomeForm from "./components/HomeForm";
-import ButtonField from "./components/ButtonField";
+import HomeForm from "../components/HomeForm";
 
 export function Home() {
   const [data, setData] = useState([]); // Estado para armazenar os dados da API
@@ -64,37 +62,16 @@ export function Home() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ padding: 2 }}>
-      <ButtonField onClick={logout} type={"button"}>
-        Logout
-      </ButtonField>
-      <div sx={{ alignItems: "center" }}>
-        <h1>HOME</h1>
-        {nothing ? <h2>No table created. Create a new task.</h2> : ""}
-        {loading ? (
-          <div className="loading-Box">
-            <CircularProgress />
-          </div>
-        ) : (
-          data.map((item) => (
-            <HomeForm
-              key={item.id}
-              {...{
-                item,
-                deleteTable,
-                viewTask,
-              }}
-            ></HomeForm>
-          ))
-        )}
-        <ButtonField
-          onClick={() => navigate("/add/task/")}
-          color={"success"}
-          type={"button"}
-        >
-          Create Task
-        </ButtonField>
-      </div>
-    </Container>
+    <HomeForm
+      {...{
+        logout,
+        nothing,
+        loading,
+        data,
+        deleteTable,
+        viewTask,
+        navigate,
+      }}
+    ></HomeForm>
   );
 }
