@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axiosInstance from "../API/Api";
+import axiosInstance from "../api/Api";
 
 //components
 import EditForm from "../components/EditForm";

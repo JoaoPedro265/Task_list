@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../API/Api";
+import axiosInstance from "../api/Api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 //Styles

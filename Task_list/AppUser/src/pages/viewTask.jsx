@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axiosInstance from "../API/Api";
+import axiosInstance from "../api/Api";
 import { useNavigate, useParams } from "react-router-dom";
 //Components
 import ViewTaskField from "../components/ViewTaskField";
