@@ -1,11 +1,17 @@
+import { useNavigate } from "react-router-dom";
+//UI KIT
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   TextField,
   Button,
   Box,
   Checkbox,
   CircularProgress,
+  Container,
 } from "@mui/material";
+//styles
 import "./styles/EditForm.css";
+
 const EditForm = ({
   setCompleted,
   setTaskName,
@@ -17,63 +23,78 @@ const EditForm = ({
   deleteTask,
   loading,
 }) => {
+  const navigate = useNavigate();
   return (
     <>
-      <h1>EDIT TASK</h1>
-      {loading ? (
-        <div className="loading-Box">
-          <CircularProgress />
-        </div>
-      ) : (
-        <Box className="viewTask-box">
-          <form onSubmit={editTask}>
-            <TextField
-              fullWidth
-              required
-              id="outlined-basic"
-              variant="outlined"
-              label="Task Name"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-            />
-            <div>
+      <Container maxWidth="lg" sx={{ padding: 2 }}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIosNewIcon />}
+          onClick={() => navigate("/home/")}
+          sx={{ marginTop: 2 }}
+        >
+          Back to home
+        </Button>
+        <h1>EDIT TASK</h1>
+        {loading ? (
+          <div className="loading-Box">
+            <CircularProgress />
+          </div>
+        ) : (
+          <Box className="viewTask-box">
+            <form onSubmit={editTask}>
               <TextField
                 fullWidth
                 required
-                multiline
-                label="Text"
-                rows={10}
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              ></TextField>
-            </div>
-            <Box className="buttonBox">
-              <div className="Buttons">
-                <Button
-                  className="button"
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                >
-                  save
-                </Button>
-                <Button variant="contained" color="error" onClick={deleteTask}>
-                  Delete Task
-                </Button>
+                id="outlined-basic"
+                variant="outlined"
+                label="Task Name"
+                value={taskName}
+                onChange={(e) => setTaskName(e.target.value)}
+              />
+              <div>
+                <TextField
+                  fullWidth
+                  required
+                  multiline
+                  label="Text"
+                  rows={10}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                ></TextField>
               </div>
-              <div className="completed">
-                <span>Completed:</span>
-                <Checkbox
-                  color="success"
-                  sx={{ "& .MuiSvgIcon-root": { fontSize: 50 } }}
-                  checked={completed}
-                  onChange={(e) => setCompleted(e.target.checked)}
-                />
-              </div>
-            </Box>
-          </form>
-        </Box>
-      )}
+              <Box className="buttonBox">
+                <div className="Buttons">
+                  <Button
+                    className="button"
+                    variant="contained"
+                    color="success"
+                    type="submit"
+                  >
+                    save
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={deleteTask}
+                  >
+                    Delete Task
+                  </Button>
+                </div>
+                <div className="completed">
+                  <span>Completed:</span>
+                  <Checkbox
+                    color="success"
+                    sx={{ "& .MuiSvgIcon-root": { fontSize: 50 } }}
+                    checked={completed}
+                    onChange={(e) => setCompleted(e.target.checked)}
+                  />
+                </div>
+              </Box>
+            </form>
+          </Box>
+        )}
+      </Container>
     </>
   );
 };

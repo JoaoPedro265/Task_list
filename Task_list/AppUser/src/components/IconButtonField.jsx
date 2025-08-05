@@ -1,5 +1,7 @@
-import "./styles/IconButtonField.css";
+//UI KIT
 import { IconButton } from "@mui/material";
+//Styles
+import "./styles/IconButtonField.css";
 
 const IconButtonField = ({ onClick, type, children }) => {
   return (

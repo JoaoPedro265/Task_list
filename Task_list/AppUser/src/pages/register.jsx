@@ -3,9 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 //componente
 import RegisterField from "../components/RegisterField";
-//UI KIt
-import { Container, Button } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 const apiUrl = import.meta.env.VITE_URL_API; //importando variaveis de ambiente
 
 export function Register() {
@@ -39,28 +36,18 @@ export function Register() {
   };
 
   return (
-    <Container>
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIosNewIcon />}
-        className="buttonRegister"
-        onClick={() => navigate("/home/")}
-      >
-        Back to Home
-      </Button>
-      <RegisterField
-        {...{
-          name,
-          email,
-          password,
-          setName,
-          setEmail,
-          setpassword,
-          alert,
-          registerUser,
-          loading,
-        }}
-      />
-    </Container>
+    <RegisterField
+      {...{
+        name,
+        email,
+        password,
+        setName,
+        setEmail,
+        setpassword,
+        alert,
+        registerUser,
+        loading,
+      }}
+    ></RegisterField>
   );
 }

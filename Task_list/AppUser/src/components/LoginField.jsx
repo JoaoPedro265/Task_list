@@ -1,8 +1,8 @@
+//UI Kit
+import Alert from "@mui/material/Alert";
 import { TextField, Button, Box } from "@mui/material";
 //styles
 import "./styles/LoginField.css";
-//UI Kit
-import Alert from "@mui/material/Alert";
 
 const LoginField = ({
   buttonSend,

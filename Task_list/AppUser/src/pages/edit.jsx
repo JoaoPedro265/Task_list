@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../API/Api";
 
-//UI KIT
-import { Button, Container } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+//components
 import EditForm from "../components/EditForm";
 
 export function Edit() {
@@ -72,29 +70,19 @@ export function Edit() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ padding: 2 }}>
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIosNewIcon />}
-        onClick={() => navigate("/home/")}
-        sx={{ marginTop: 2 }}
-      >
-        Back to home
-      </Button>
-      <EditForm
-        {...{
-          setCompleted,
-          setTaskName,
-          setText,
-          editTask,
-          taskName,
-          text,
-          completed,
-          deleteTask,
-          loading,
-        }}
-      />
-    </Container>
+    <EditForm
+      {...{
+        setCompleted,
+        setTaskName,
+        setText,
+        editTask,
+        taskName,
+        text,
+        completed,
+        deleteTask,
+        loading,
+      }}
+    ></EditForm>
   );
 }
 

@@ -4,7 +4,8 @@ import ButtonField from "./ButtonField";
 //UI kit
 import { Box, TextField, Checkbox, Button, Container } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-
+//Styles
+import "./styles/CreateTaskField.css";
 const CreateTaskField = ({
   addTask,
   taskName,
@@ -27,7 +28,7 @@ const CreateTaskField = ({
           Back to Home
         </Button>
         <h1>CREATE TASK</h1>
-        <Box className="viewTask-box">
+        <Box className="createTask-box">
           <form onSubmit={addTask}>
             <TextField
               fullWidth

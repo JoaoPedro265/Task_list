@@ -1,11 +1,11 @@
-//Styles
-import "./styles/HomeForm.css";
 //UI KIT
 import { Box, Checkbox, Container, CircularProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import IconButtonField from "./IconButtonField";
 //components
 import ButtonField from "../components/ButtonField";
+//Styles
+import "./styles/HomeForm.css";
 
 const HomeForm = ({
   logout,
