@@ -28,14 +28,16 @@ O projeto implementa autenticação segura via <strong>JWT</strong>, persistênc
 </tr>
 </table>
 
+<br clear="left"/>
+<br />
 
 <h2 align="left">🚀 Funcionalidades Avançadas</h2>
 
 <ul>
-<li><strong>Autenticação Completa:</strong> Fluxo de Login e Registro com tokens JWT armazenados de forma segura.</li>
+<li><strong>Autenticação Completa:</strong> Fluxo de Login e Registro com tokens JWT armazenados de forma segura via Cookies.</li>
 <li><strong>CRUD de Tarefas:</strong> Criar, Listar, Atualizar e Deletar tarefas integradas ao banco PostgreSQL.</li>
-<li><strong>Filtros e Datas:</strong> Organização de prazos utilizando <code>dayjs</code>.</li>
-<li><strong>Interface Responsiva:</strong> Componentização profissional com <strong>Styled Components</strong> e <strong>MUI</strong>.</li>
+<li><strong>Filtros e Datas:</strong> Organização de prazos utilizando <code>dayjs</code> para manipulação de tempo.</li>
+<li><strong>Interface Responsiva:</strong> Componentização profissional com <strong>Styled Components</strong> e componentes prontos do <strong>MUI</strong>.</li>
 <li><strong>Consumo de API Assíncrono:</strong> Gerenciamento de requisições e estados globais com Axios.</li>
 </ul>
 
@@ -50,5 +52,4 @@ O Frontend (Vite) envia credenciais para o Django.
 O Backend valida e retorna um par de tokens (Access/Refresh).
 
 O Frontend armazena o token e o utiliza no Header de cada requisição para o banco de dados.
-
 ![Capturar](https://github.com/user-attachments/assets/fe1622be-2385-4e7c-ba6a-612eb29eaeec)
