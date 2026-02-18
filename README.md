@@ -59,4 +59,11 @@ O Frontend armazena o token e o utiliza no Header de cada requisição para o ba
 <img src="https://skillicons.dev/icons?i=react,vite,js,py,django,postgres,materialui,styledcomponents" height="40" />
 </div>
 
-![Capturar](https://github.com/user-attachments/assets/fe1622be-2385-4e7c-ba6a-612eb29eaeec)
+<h2 align="left">📺 Demonstração em Vídeo</h2>
+
+<div align="center">
+  ![Capturar](https://github.com/user-attachments/assets/fe1622be-2385-4e7c-ba6a-612eb29eaeec)
+
+  <p><i>D.</i></p>
+</div>
+
